@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0
+      author: Moldir
+      changes:
+        - sqlFile:
+            path: changes/V1_create_table_appUser.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 1
+      author: Moldir
+      changes:
+        - sqlFile:
+            path: changes/V2_create_table_parent.sql
+            relativeToChangelogFile: true
+        - sqlFile:
+            path: changes/V3_create_table_child.sql
+            relativeToChangelogFile: true
