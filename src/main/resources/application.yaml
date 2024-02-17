@@ -12,9 +12,12 @@ spring:
       mode: always
       continue-on-error: false
   jpa:
-    show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   liquibase:
     change-log: classpath:/db/changelog/app-changelog.yaml
     default-schema: berkut
+
+server:
+  tomcat:
+    max-swallow-size: 100MB

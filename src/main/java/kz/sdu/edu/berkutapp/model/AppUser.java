@@ -6,7 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import kz.sdu.edu.berkutapp.model.dto.ChildDTO;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
@@ -20,6 +22,9 @@ public class AppUser {
 
     @Column
     private String username;
+
+    @Column
+    private String password;
 
     @Column(name = "phone_number")
     private String phoneNumber;

@@ -11,6 +11,7 @@ import kz.sdu.edu.berkutapp.repository.ChildRepository;
 import kz.sdu.edu.berkutapp.repository.ParentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,14 +24,15 @@ public class AuthService {
 
     private final ChildRepository childRepository;
 
-    private final VerificationService verificationService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Long register(byte[] image, String username, String phoneNumber, UserTypeEnum userTypeEnum) {
+    public Long register(byte[] image, String username, String phoneNumber, UserTypeEnum userTypeEnum, String password) {
         AppUser appUser = new AppUser();
         appUser.setUsername(username);
         appUser.setPhoneNumber(phoneNumber);
         appUser.setImage(image);
-        appUser = appUserRepository.save(appUser);
+        appUser.setPassword(bCryptPasswordEncoder.encode(password));
+        appUserRepository.save(appUser);
         switch (userTypeEnum) {
             case CHILD -> {
                 Child child = new Child();

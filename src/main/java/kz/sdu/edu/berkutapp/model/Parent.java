@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "parent", schema = "berkut")
 public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +25,7 @@ public class Parent {
     private AppUser appUser;
     //orphanRemoval=true -  if a Parent entity is disassociated from an AppUser, the AppUser entity will be removed (considered an orphan) from the database.
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "parent")
     private List<Child> children = new ArrayList<>();
     //orphanRemoval=true -  if a Child is removed from the children list, it will be deleted from the database.
 }

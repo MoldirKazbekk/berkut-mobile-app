@@ -16,3 +16,17 @@ databaseChangeLog:
         - sqlFile:
             path: changes/V3_create_table_child.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 2
+      author: Moldir
+      changes:
+        - sqlFile:
+            path: changes/V4_create_table_pin_verification.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 3
+      author: Moldir
+      changes:
+        - sqlFile:
+            path: changes/V5_alter_table_app_user.sql
+            relativeToChangelogFile: true

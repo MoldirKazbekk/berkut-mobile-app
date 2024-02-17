@@ -1,6 +1,7 @@
 package kz.sdu.edu.berkutapp.controller;
 
-import kz.sdu.edu.berkutapp.repository.AppUserRepository;
+import kz.sdu.edu.berkutapp.model.dto.UserDTO;
+import kz.sdu.edu.berkutapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,11 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
-    private final AppUserRepository appUserRepository;
-    @GetMapping("/{id}")
-    public ResponseEntity<byte[]> getAppUserById(@PathVariable("id") Long id){
+    private final UserService userService;
+
+    @GetMapping("/profile-photo/{id}")
+    public ResponseEntity<byte[]> getAppUserPhoto(@PathVariable("id") Long id) {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", MediaType.IMAGE_JPEG_VALUE);
-        return new ResponseEntity<>(appUserRepository.findById(id).get().getImage(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(userService.getPhotoByUserId(id), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public UserDTO getUserInfo(@PathVariable("id") Long id) {
+        return userService.getUserInfo(id);
     }
 }
