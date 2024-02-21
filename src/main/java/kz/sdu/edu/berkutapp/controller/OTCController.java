@@ -34,7 +34,7 @@ public class OTCController {
     }
 
     @PostMapping("/sign-in")
-    @Operation(summary = "If phone number is successfully verified, signIn the user with specified data")
+    @Operation(summary = "If phone number is successfully verified, signIn the user(PARENT/CHILD) with specified data")
     @ApiResponses(value = {@ApiResponse(responseCode = "404", description = "User with phone number already registered"),
             @ApiResponse(responseCode = "400", description = "Pin code is not correct or has expired")})
     public ResponseEntity<TokenDTO> verifyAndRegister(@RequestBody VerificationRequest verificationRequest) {

@@ -1,0 +1,5 @@
+spring:
+ datasource:
+    url: jdbc:postgresql://test-postgres-container:5432/berkut
+    username: Moldir
+    password: password

@@ -3,20 +3,19 @@ spring:
     name: berkut-app
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/berkut-app
-    username: postgres
-    password: 123456
+    url: jdbc:postgresql://localhost:5433/berkut
+    username: Moldir
+    password: password
     driver-class-name: org.postgresql.Driver
-  sql:
-    init:
-      mode: always
-      continue-on-error: false
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        default_schema: berkut
   liquibase:
-    change-log: classpath:/db/changelog/app-changelog.yaml
     default-schema: berkut
+    change-log: classpath:/db/changelog/app-changelog.yaml
 
 server:
   tomcat:
