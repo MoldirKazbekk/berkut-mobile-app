@@ -23,9 +23,6 @@ public class AppUser {
     @Column
     private String username;
 
-    @Column
-    private String password;
-
     @Column(name = "phone_number")
     private String phoneNumber;
 

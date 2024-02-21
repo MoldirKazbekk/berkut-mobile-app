@@ -7,17 +7,14 @@ import com.infobip.BaseUrl;
 import com.infobip.api.SmsApi;
 import com.infobip.model.SmsAdvancedTextualRequest;
 import com.infobip.model.SmsDestination;
-import com.infobip.model.SmsResponse;
 import com.infobip.model.SmsTextualMessage;
 import kz.sdu.edu.berkutapp.model.PinVerification;
+import kz.sdu.edu.berkutapp.model.dto.VerificationRequest;
 import kz.sdu.edu.berkutapp.repository.PinVerificationRepository;
-import kz.sdu.edu.berkutapp.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -34,36 +31,44 @@ public class VerificationService {
 
     private final PinVerificationRepository pinVerificationRepository;
 
-    private final JwtUtil jwtUtil;
-
-    private static Integer PINCODE_TTL_SECONDS = 60;
+    private static Integer PINCODE_TTL_SECONDS = 60 * 10;
 
     public void generateOTP(String phoneNumber) {
         ApiClient apiClient = ApiClient.forApiKey(ApiKey.from(API_KEY))
                 .withBaseUrl(BaseUrl.from(BASE_URL))
                 .build();
         SmsApi smsApi = new SmsApi(apiClient);
-        PinVerification pinVerification = new PinVerification(phoneNumber, generatePinCode(), LocalDateTime.now());
+        PinVerification pinVerification = pinVerificationRepository.findById(phoneNumber)
+                .orElseGet(() -> new PinVerification(phoneNumber));
+        pinVerification.setPinCode(generatePinCode());
         SmsTextualMessage smsMessage = new SmsTextualMessage()
                 .from("BerkutApp")
                 .addDestinationsItem(new SmsDestination().to("+7" + phoneNumber))
-                .text("Your verification code number is: " + pinVerification.getPinCode());
+                .text("Hello! Your verification code number for Berkut App is: " + pinVerification.getPinCode());
         SmsAdvancedTextualRequest smsMessageRequest = new SmsAdvancedTextualRequest()
                 .messages(List.of(smsMessage));
+        log.info("Sending pin-code {} to phone {}", pinVerification.getPinCode(), pinVerification.getPhoneNumber());
         try {
             pinVerificationRepository.save(pinVerification);
-            SmsResponse smsResponse = smsApi.sendSmsMessage(smsMessageRequest).execute();
+            smsApi.sendSmsMessage(smsMessageRequest).execute();
         } catch (ApiException apiException) {
             log.error(apiException.toString());
         }
     }
 
-    public String verifyUserOTP(String code, String phoneNumber, String username) {
-        var pinVerification = pinVerificationRepository.findById(phoneNumber).orElseThrow();
-        if (pinVerification.getCreatedAt().plusSeconds(PINCODE_TTL_SECONDS).isAfter(LocalDateTime.now())) {
-            pinVerificationRepository.delete(pinVerification);
-            return jwtUtil.generateToken(username);
+    public boolean verifyUserOTP(VerificationRequest verificationRequest) {
+        var pinVerification = pinVerificationRepository.findById(verificationRequest.getPhoneNumber())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "PIN code for current phone number is not generated"));
+        if (pinVerification.getCreatedAt().plusSeconds(PINCODE_TTL_SECONDS).isAfter(LocalDateTime.now())) { //not expired
+            if (verificationRequest.getCode().equals(pinVerification.getPinCode())) { //correct pin code
+                log.info("Phone number {} is verified successfully", verificationRequest.getPhoneNumber());
+                pinVerificationRepository.delete(pinVerification);
+                return true;
+            }
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PIN-code is not correct");
         }
+        pinVerificationRepository.delete(pinVerification);
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PIN-code has expired");
     }
 

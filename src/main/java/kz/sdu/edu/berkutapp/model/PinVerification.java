@@ -25,4 +25,13 @@ public class PinVerification {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public PinVerification(String phoneNumber) {
+        setPhoneNumber(phoneNumber);
+    }
+
+    public void setPinCode(String pinCode) {
+        this.pinCode = pinCode;
+        this.createdAt = LocalDateTime.now();
+    }
 }

@@ -19,9 +19,9 @@ public class AppUserDetailsService implements UserDetailsService {
     private final AppUserRepository appUserRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = appUserRepository.findAppUserByUsername(username).orElseThrow();
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        AppUser appUser = appUserRepository.findById(Long.valueOf(id)).orElseThrow();
         return new org.springframework.security.core.userdetails.User
-                (username, appUser.getPassword(), AuthorityUtils.createAuthorityList("ROLE_USER"));
+                (id, appUser.getPhoneNumber(), AuthorityUtils.createAuthorityList("ROLE_USER"));
     }
 }
