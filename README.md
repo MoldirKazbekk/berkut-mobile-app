@@ -17,3 +17,14 @@ docker container run
 -p 8090:8080 
 --link test-postgres-container:postgres 
 -d --rm 6dd8537ded27
+
+FROM gradle:8.6.0-jdk17 as build
+WORKDIR /app
+COPY . .
+RUN ./gradlew build
+
+FROM openjdk:17
+WORKDIR /
+COPY --from=build /app/build/libs/berkut-app-0.0.1-SNAPSHOT.jar /
+EXPOSE 8080
+ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar", "/berkut-app-0.0.1-SNAPSHOT.jar"]
