@@ -49,6 +49,6 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-bootJar {
-	mainClassName = 'kz.sdu.edu.berkutapp.BerkutAppApplication' // Replace with your main application class
-}
+//bootJar {
+//	mainClassName = 'kz.sdu.edu.berkutapp.BerkutAppApplication' // Replace with your main application class
+//}
