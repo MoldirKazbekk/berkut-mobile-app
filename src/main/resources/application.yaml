@@ -3,9 +3,9 @@ spring:
     name: berkut-app
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/berkut
-    username: Moldir
-    password: password
+    url: ${DB_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     database: postgresql
@@ -16,6 +16,9 @@ spring:
   liquibase:
     default-schema: berkut
     change-log: classpath:/db/changelog/app-changelog.yaml
+  sql:
+    init:
+      continue-on-error: true
 
 server:
   tomcat:
