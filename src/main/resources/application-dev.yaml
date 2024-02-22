@@ -1,5 +1,5 @@
 spring:
   datasource:
-    url: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${RAILWAY_TCP_PROXY_DOMAIN}:${RAILWAY_TCP_PROXY_PORT}/${POSTGRES_DB}
+    url: ${DB_URL}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}

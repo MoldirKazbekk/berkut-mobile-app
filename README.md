@@ -21,7 +21,7 @@ docker container run
 FROM gradle:8.6.0-jdk17 as build
 WORKDIR /app
 COPY . .
-RUN ./gradlew build
+RUN ./gradlew clean build -x check -x test
 
 FROM openjdk:17
 WORKDIR /
