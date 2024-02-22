@@ -14,7 +14,7 @@ import org.hibernate.annotations.Type;
 
 @Data
 @Entity
-@Table(schema = "berkut", name = "app_user")
+@Table(name = "app_user")
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //the value of the primary key is automatically generated.

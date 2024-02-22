@@ -10,11 +10,7 @@ spring:
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        default_schema: berkut
   liquibase:
-    default-schema: berkut
     change-log: classpath:/db/changelog/app-changelog.yaml
   sql:
     init:

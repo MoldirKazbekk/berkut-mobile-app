@@ -1,4 +1,4 @@
-ALTER TABLE berkut.child
+ALTER TABLE child
 DROP
 CONSTRAINT fk_parent_id;
 ALTER TABLE berkut.child

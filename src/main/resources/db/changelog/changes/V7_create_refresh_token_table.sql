@@ -1,4 +1,4 @@
-create table berkut.refresh_token
+create table refresh_token
 (
     id          SERIAL primary key,
     token       varchar(100) not null,

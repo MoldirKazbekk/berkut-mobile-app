@@ -1,2 +1,2 @@
-alter table berkut.app_user
+alter table app_user
     add column password varchar(100);

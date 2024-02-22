@@ -1,4 +1,4 @@
-create table berkut.child
+create table child
 (
     id          SERIAL PRIMARY KEY,
     app_user_id INT not null,

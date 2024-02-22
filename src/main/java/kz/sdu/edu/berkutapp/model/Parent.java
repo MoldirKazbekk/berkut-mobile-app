@@ -15,7 +15,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "parent", schema = "berkut")
+@Table(name = "parent")
 public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
