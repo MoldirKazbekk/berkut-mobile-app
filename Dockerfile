@@ -14,7 +14,7 @@
 #ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar", "/berkut-app-0.0.1-SNAPSHOT.jar"]
 ##WARNING!: case-sensitive
 
-FROM gradle:8.5-jdk11 as build
+FROM gradle:8.5-jdk17 as build
 WORKDIR /app
 COPY . .
 RUN ./gradlew build
