@@ -18,5 +18,5 @@ public class VerificationRequest implements Serializable {
     @JsonProperty
     private String username;
 
-    private UserTypeEnum userTypeEnum;
+    private UserType role;
 }

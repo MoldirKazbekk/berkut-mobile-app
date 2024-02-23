@@ -6,44 +6,16 @@ databaseChangeLog:
         - sqlFile:
             path: changes/V1_create_table_appUser.sql
             relativeToChangelogFile: true
+        - sqlFile:
+            path: changes/V2_create_table_pin_verification.sql
+            relativeToChangelogFile: true
+        - sqlFile:
+            path: changes/V3_create_refresh_token_table.sql
+            relativeToChangelogFile: true
   - changeSet:
       id: 1
       author: Moldir
       changes:
         - sqlFile:
-            path: changes/V2_create_table_parent.sql
-            relativeToChangelogFile: true
-        - sqlFile:
-            path: changes/V3_create_table_child.sql
-            relativeToChangelogFile: true
-  - changeSet:
-      id: 2
-      author: Moldir
-      changes:
-        - sqlFile:
-            path: changes/V4_create_table_pin_verification.sql
-            relativeToChangelogFile: true
-  - changeSet:
-      id: 3
-      author: Moldir
-      changes:
-        - sqlFile:
-            path: changes/V5_alter_table_app_user.sql
-            relativeToChangelogFile: true
-  - changeSet:
-      id: 4
-      author: Moldir
-      changes:
-        - sqlFile:
-            path: changes/V6_alter_child_app_user_tables.sql
-            relativeToChangelogFile: true
-        - sqlFile:
-            path: changes/V7_create_refresh_token_table.sql
-            relativeToChangelogFile: true
-  - changeSet:
-      id: 5
-      author: Moldir
-      changes:
-        - sqlFile:
-            path: changes/V8_alter_child_table.sql
+            path: changes/V4_create_parent_child_table.sql
             relativeToChangelogFile: true

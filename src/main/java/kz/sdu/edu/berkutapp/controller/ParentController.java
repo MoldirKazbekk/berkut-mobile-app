@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasRole(T(kz.sdu.edu.berkutapp.model.dto.UserTypeEnum).PARENT.name())")
+@PreAuthorize("hasRole(T(kz.sdu.edu.berkutapp.model.dto.UserType).PARENT.name())")
 @RequestMapping("/parents/{parent_id}")
 public class ParentController {
     private final ParentService parentService;

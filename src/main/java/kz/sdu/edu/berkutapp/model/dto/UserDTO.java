@@ -9,7 +9,7 @@ import org.springframework.hateoas.RepresentationModel;
 public class UserDTO extends RepresentationModel<UserDTO> {
     private String username;
 
-    private UserTypeEnum userTypeEnum;
+    private UserType role;
 
     private String phoneNumber;
 

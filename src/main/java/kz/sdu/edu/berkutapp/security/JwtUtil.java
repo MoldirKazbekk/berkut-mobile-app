@@ -1,14 +1,10 @@
 package kz.sdu.edu.berkutapp.security;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import kz.sdu.edu.berkutapp.model.AppUser;
-import kz.sdu.edu.berkutapp.model.dto.UserTypeEnum;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.function.Function;
@@ -64,7 +60,7 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_TTL))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .claim(PHONE, appUser.getPhoneNumber())
-                .claim(ROLE, appUser.getUserTypeEnum())
+                .claim(ROLE, appUser.getRole())
                 .compact();
     }
 

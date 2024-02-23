@@ -22,8 +22,8 @@ public class AuthController {
 
     @Operation(summary = "Generate new access token by provided refresh and expired access tokens")
     @PutMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken(@RequestBody TokenDTO tokenDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwt) {
-        var newJwt = authService.refreshJWT(tokenDTO.getRefreshToken(), jwt);
+    public ResponseEntity<?> refreshAccessToken(@RequestBody TokenDTO tokenDTO) {
+        var newJwt = authService.refreshJWT(tokenDTO.getRefreshToken());
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, newJwt).build();
     }
 }

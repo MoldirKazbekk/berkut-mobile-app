@@ -1,20 +1,22 @@
 package kz.sdu.edu.berkutapp.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PostLoad;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import kz.sdu.edu.berkutapp.model.dto.ChildDTO;
-import kz.sdu.edu.berkutapp.model.dto.UserTypeEnum;
+import kz.sdu.edu.berkutapp.model.dto.UserType;
 import lombok.Data;
-import org.hibernate.annotations.Type;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -33,21 +35,17 @@ public class AppUser {
     @Column(name = "image", columnDefinition = "bytea")
     private byte[] image;
 
-    @Transient
-    private UserTypeEnum userTypeEnum;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private UserType role;
 
-    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
-    private Parent parent;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_relationship", schema = "public",
+            joinColumns = @JoinColumn(name = "parent_id"),
+            inverseJoinColumns = @JoinColumn(name = "child_id"))
+    private Set<AppUser> children = new HashSet<>();
 
-    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
-    private Child child;
-
-    @PostLoad
-    private void onPostLoad() {
-        if (parent != null) {
-            userTypeEnum = UserTypeEnum.PARENT;
-        } else if (child != null) {
-            userTypeEnum = UserTypeEnum.CHILD;
-        }
-    }
+    @ManyToMany(mappedBy = "children", fetch = FetchType.EAGER)
+    Set<AppUser> parents = new HashSet<>();
 }
