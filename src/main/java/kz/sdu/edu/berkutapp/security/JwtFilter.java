@@ -30,16 +30,19 @@ public class JwtFilter extends OncePerRequestFilter {
         String id;
         String jwt;
         String phoneNumber;
+        String role;
         if (authorizationHeader != null) {
             try {
                 jwt = authorizationHeader.substring(7);
                 id = jwtUtil.extractId(jwt);
                 phoneNumber = jwtUtil.extractPhoneNumber(jwt);
+                role = jwtUtil.extractRole(jwt);
+                log.info("role of user {}: {}", phoneNumber, role);
                 if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     if (jwtUtil.validateToken(jwt, id)) {
                         SecurityContextHolder.getContext().setAuthentication(
                                 new UsernamePasswordAuthenticationToken(id, phoneNumber,
-                                        AuthorityUtils.createAuthorityList("ROLE_USER")));
+                                        AuthorityUtils.createAuthorityList("ROLE_USER", role)));
                     }
                 }
             } catch (ExpiredJwtException e) {

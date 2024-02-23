@@ -5,6 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import kz.sdu.edu.berkutapp.model.AppUser;
+import kz.sdu.edu.berkutapp.model.dto.UserTypeEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,12 +18,22 @@ public class JwtUtil {
 
     private final String SECRET_KEY = "secret-key-berkut";
 
+    private final String PHONE = "phoneNumber";
+
+    private final String ROLE = "role";
+
+    private final int TOKEN_TTL = 1000 * 60 * 60 * 300; //300 hours jwt ttl
+
     public String extractId(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     public String extractPhoneNumber(String token) {
-        return extractClaim(token, (claims) -> claims.get("phoneNumber", String.class));
+        return extractClaim(token, (claims) -> claims.get(PHONE, String.class));
+    }
+
+    public String extractRole(String token) {
+        return extractClaim(token, (claims) -> claims.get(ROLE, String.class));
     }
 
     public Date extractExpiration(String token) {
@@ -43,16 +54,17 @@ public class JwtUtil {
     }
 
     public String generateToken(AppUser appUser) {
-        return createToken(appUser.getId(), appUser.getPhoneNumber());
+        return createToken(appUser);
     }
 
-    private String createToken(Long id, String phoneNumber) {
+    private String createToken(AppUser appUser) {
         return Jwts.builder()
-                .setSubject(id.toString())
+                .setSubject(appUser.getId().toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60)) // 1 minutes
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_TTL))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .claim("phoneNumber", phoneNumber)
+                .claim(PHONE, appUser.getPhoneNumber())
+                .claim(ROLE, appUser.getUserTypeEnum())
                 .compact();
     }
 

@@ -44,19 +44,20 @@ public class AuthService {
         AppUser appUser = new AppUser();
         appUser.setUsername(verificationRequest.getUsername());
         appUser.setPhoneNumber(verificationRequest.getPhoneNumber());
-        appUserRepository.save(appUser);
+        appUser.setUserTypeEnum(verificationRequest.getUserTypeEnum());
         switch (verificationRequest.getUserTypeEnum()) {
             case CHILD -> {
                 Child child = new Child();
                 child.setAppUser(appUser);
-                childRepository.save(child);
+                appUser.setChild(child);
             }
             case PARENT -> {
                 Parent parent = new Parent();
                 parent.setAppUser(appUser);
-                parentRepository.save(parent);
+                appUser.setParent(parent);
             }
         }
+        appUserRepository.save(appUser);
         return appUser;
     }
 

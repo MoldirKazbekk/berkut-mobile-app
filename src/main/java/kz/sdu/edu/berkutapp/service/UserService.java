@@ -27,21 +27,19 @@ public class UserService {
 
     private final ChildRepository childRepository;
 
-    public byte[] getImage() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        Long id = (Long) auth.getPrincipal();
+    public byte[] getImage(Long id) {
         return appUserRepository.findById(id).orElseThrow().getImage();
     }
 
     @Transactional
-    public boolean setImage(byte[] image) {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        String id = auth.getPrincipal().toString();
-//        String phoneNumber = auth.getDetails().toString();
+    public boolean updateUserData(Long id, byte[] image, String newUsername) {
         log.info("Setting new image for user by id {}", id);
-        AppUser appUser = appUserRepository.findById(Long.valueOf(id)).orElseThrow(() ->
+        AppUser appUser = appUserRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found " + id));
         appUser.setImage(image);
+        if (newUsername != null) {
+            appUser.setUsername(newUsername);
+        }
         appUserRepository.save(appUser);
         return true;
     }
@@ -64,7 +62,4 @@ public class UserService {
         }
     }
 
-    public boolean userWithPhoneNumberExists(String phoneNumber) {
-        return appUserRepository.findByPhoneNumber(phoneNumber).isPresent();
-    }
 }

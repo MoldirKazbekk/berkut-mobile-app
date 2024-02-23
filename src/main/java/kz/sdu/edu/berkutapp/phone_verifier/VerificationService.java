@@ -68,7 +68,7 @@ public class VerificationService {
             }
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PIN-code is not correct");
         }
-        pinVerificationRepository.delete(pinVerification);
+//        pinVerificationRepository.delete(pinVerification);
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PIN-code has expired");
     }
 
