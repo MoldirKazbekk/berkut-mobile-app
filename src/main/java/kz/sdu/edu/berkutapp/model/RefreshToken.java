@@ -29,6 +29,6 @@ public class RefreshToken {
     @Column(name = "expire_date")
     private LocalDateTime expireDate;
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "app_user_id", referencedColumnName = "id")
     private AppUser appUser;
 }

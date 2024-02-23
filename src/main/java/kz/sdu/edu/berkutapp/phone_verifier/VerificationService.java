@@ -41,19 +41,19 @@ public class VerificationService {
         PinVerification pinVerification = pinVerificationRepository.findById(phoneNumber)
                 .orElseGet(() -> new PinVerification(phoneNumber));
         pinVerification.setPinCode(generatePinCode());
-        SmsTextualMessage smsMessage = new SmsTextualMessage()
-                .from("BerkutApp")
-                .addDestinationsItem(new SmsDestination().to("+7" + phoneNumber))
-                .text("Hello! Your verification code number for Berkut App is: " + pinVerification.getPinCode());
-        SmsAdvancedTextualRequest smsMessageRequest = new SmsAdvancedTextualRequest()
-                .messages(List.of(smsMessage));
+//        SmsTextualMessage smsMessage = new SmsTextualMessage()
+//                .from("BerkutApp")
+//                .addDestinationsItem(new SmsDestination().to("+7" + phoneNumber))
+//                .text("Hello! Your verification code number for Berkut App is: " + pinVerification.getPinCode());
+//        SmsAdvancedTextualRequest smsMessageRequest = new SmsAdvancedTextualRequest()
+//                .messages(List.of(smsMessage));
         log.info("Sending pin-code {} to phone {}", pinVerification.getPinCode(), pinVerification.getPhoneNumber());
-        try {
+//        try {
             pinVerificationRepository.save(pinVerification);
-            smsApi.sendSmsMessage(smsMessageRequest).execute();
-        } catch (ApiException apiException) {
-            log.error(apiException.toString());
-        }
+//            smsApi.sendSmsMessage(smsMessageRequest).execute();
+//        } catch (ApiException apiException) {
+//            log.error(apiException.toString());
+//        }
     }
 
     public boolean verifyUserOTP(VerificationRequest verificationRequest) {

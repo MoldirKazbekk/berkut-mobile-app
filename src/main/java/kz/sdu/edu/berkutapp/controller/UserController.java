@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,9 +47,9 @@ public class UserController {
         return new ResponseEntity<>(userService.getImage(id), headers, HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping("setImage")
     public boolean setPhoto(@NotNull @RequestParam(value = "image", required = false) MultipartFile image,
-                            @RequestParam(name = "username", required = false) String newUsername, @PathVariable("id") Long id) throws IOException {
-        return userService.updateUserData(id, image.getBytes(), newUsername);
+                            @RequestParam(name = "username", required = false) String newUsername, @PathVariable("id") Long id) throws IOException, GeneralSecurityException, GeneralSecurityException {
+        return userService.updateUserData(id, image, newUsername);
     }
 }
