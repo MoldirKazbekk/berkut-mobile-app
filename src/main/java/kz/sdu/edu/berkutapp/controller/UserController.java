@@ -1,12 +1,19 @@
 package kz.sdu.edu.berkutapp.controller;
 
+import java.nio.file.Files;
+import java.io.*;
+import com.google.api.client.http.InputStreamContent;
+import com.google.api.services.drive.model.File;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import kz.sdu.edu.berkutapp.model.AppUser;
 import kz.sdu.edu.berkutapp.model.dto.UserDTO;
+import kz.sdu.edu.berkutapp.repository.AppUserRepository;
 import kz.sdu.edu.berkutapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +36,7 @@ import java.security.GeneralSecurityException;
 @Slf4j
 public class UserController {
     private final UserService userService;
-
+    private final AppUserRepository appUserRepository;
     @GetMapping
     public UserDTO getUserInfo(@PathVariable("id") Long id) {
         return userService.getUserInfo(id);
@@ -37,14 +44,14 @@ public class UserController {
 
     @GetMapping("/profile-photo")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "no profile image for specified user")})
-    public ResponseEntity<byte[]> getAppUserPhoto(@PathVariable("id") Long id) {
+    public ResponseEntity<byte[]> getAppUserPhoto(@PathVariable("id") Long id) throws GeneralSecurityException, IOException {
+
+        AppUser appUser = appUserRepository.findById(id).orElseThrow();
+        String imageId = appUser.getImage();
+
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", MediaType.IMAGE_JPEG_VALUE);
-        byte[] image = userService.getImage(id);
-        if (image == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(userService.getImage(id), headers, HttpStatus.OK);
+        return new ResponseEntity(userService.getImage(imageId), headers, HttpStatus.OK);
     }
 
     @PutMapping("setImage")

@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.module.ModuleReader;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -53,7 +54,9 @@ public class GoogleDriveService {
     public GoogleDriveService() throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
-        this.service = new Drive.Builder(new NetHttpTransport(),  GsonFactory.getDefaultInstance(),  getCredentials(HTTP_TRANSPORT))
+        this.service = new Drive.Builder(new NetHttpTransport(),
+                GsonFactory.getDefaultInstance(),
+                getCredentials(HTTP_TRANSPORT))
                 .setApplicationName("Drive samples")
                 .build();
     }
@@ -61,4 +64,5 @@ public class GoogleDriveService {
     public Drive getService() {
         return service;
     }
+
 }
