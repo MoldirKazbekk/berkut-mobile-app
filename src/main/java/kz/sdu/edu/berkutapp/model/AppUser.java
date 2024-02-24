@@ -39,13 +39,10 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private UserType role;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
-            name = "user_relationship", schema = "public",
+            name = "user_relationship",
             joinColumns = @JoinColumn(name = "parent_id"),
             inverseJoinColumns = @JoinColumn(name = "child_id"))
     private Set<AppUser> children = new HashSet<>();
-
-    @ManyToMany(mappedBy = "children", fetch = FetchType.EAGER)
-    Set<AppUser> parents = new HashSet<>();
 }

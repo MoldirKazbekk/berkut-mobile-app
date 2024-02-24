@@ -13,13 +13,13 @@ public class UserDTO extends RepresentationModel<UserDTO> {
 
     private String phoneNumber;
 
-    private Long userId;
+    private Long id;
 
     public UserDTO(AppUser appUser) {
         Link link = Link.of("/users/" + appUser.getId() + "/profile-photo", "profile_photo");
         add(link);
         username = appUser.getUsername();
-        userId = appUser.getId();
+        id = appUser.getId();
         phoneNumber = appUser.getPhoneNumber();
     }
 }

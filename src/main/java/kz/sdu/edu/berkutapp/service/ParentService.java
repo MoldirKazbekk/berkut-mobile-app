@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class ParentService {
-    private final AppUserRepository appUserRepository;
 
+    private final AppUserRepository appUserRepository;
 
     @Transactional
     public void addChild(Long parentId, Long childId) {
         AppUser parent = appUserRepository.findById(parentId).orElseThrow();
         AppUser child = appUserRepository.findById(childId).orElseThrow();
-        if (child.getRole() == UserType.CHILD) {
+        if (child.getRole() == UserType.CHILD && parent.getRole() == UserType.PARENT) {
             parent.getChildren().add(child);
             appUserRepository.save(parent);
         }
