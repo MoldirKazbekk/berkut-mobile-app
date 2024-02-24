@@ -44,7 +44,7 @@ public class AppSecurityConfig {
 
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/otc/**", "/auth/refresh", "/otc/sign-in")
+                                .requestMatchers("/otc/**", "/auth/refresh", "/otc/sign-in", "/geo")
                                 .permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
                                 .permitAll()
