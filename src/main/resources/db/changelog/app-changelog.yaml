@@ -19,3 +19,13 @@ databaseChangeLog:
         - sqlFile:
             path: changes/V4_create_parent_child_table.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 2
+      author: Moldir
+      changes:
+        - sqlFile:
+            path: changes/V5_create_saved_location.sql
+            relativeToChangelogFile: true
+        - sqlFile:
+            path: changes/V6_create_child_location.sql
+            relativeToChangelogFile: true

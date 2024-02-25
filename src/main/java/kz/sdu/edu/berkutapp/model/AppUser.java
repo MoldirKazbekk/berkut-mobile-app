@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import lombok.Data;
@@ -38,6 +39,9 @@ public class AppUser {
     @Column
     @Enumerated(EnumType.STRING)
     private UserType role;
+
+    @OneToMany(mappedBy = "child", fetch = FetchType.EAGER)
+    private Set<ChildLocation> childLocations = new HashSet<>();
 
     @ManyToMany
     @JoinTable(

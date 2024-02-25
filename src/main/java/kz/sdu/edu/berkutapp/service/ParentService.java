@@ -19,7 +19,8 @@ public class ParentService {
     public void addChild(Long parentId, Long childId) {
         AppUser parent = appUserRepository.findById(parentId).orElseThrow();
         AppUser child = appUserRepository.findById(childId).orElseThrow();
-        if (child.getRole() == UserType.CHILD && parent.getRole() == UserType.PARENT) {
+        if (child.getRole() == UserType.CHILD && parent.getRole() == UserType.PARENT
+                && !parent.getChildren().contains(child)) {
             parent.getChildren().add(child);
             appUserRepository.save(parent);
         }
