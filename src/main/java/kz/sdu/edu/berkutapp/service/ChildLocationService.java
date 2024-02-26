@@ -32,7 +32,10 @@ public class ChildLocationService {
         log.info("number of parents: {}", parents.size());
         for (AppUser parent : parents) {
             log.info("sending to parent: {}", parent.getUsername());
-            messagingTemplate.convertAndSendToUser(parent.getId().toString(), "/user/child-geo", geoData);
+            messagingTemplate.convertAndSendToUser(
+                    parent.getId().toString(),
+                    "/user/child-geo",
+                    geoData);
         }
     }
 

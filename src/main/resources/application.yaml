@@ -1,7 +1,6 @@
 spring:
   application:
     name: berkut-app
-#eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzA4Nzc1NTY2LCJleHAiOjE3MDk4NTU1NjYsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5MCIsInJvbGUiOiJQQVJFTlQifQ.-d1KnB-jPKjEeNh0jGN_bVlV_yQL-qhIPQb3wtNKnPw
   datasource:
     url: jdbc:postgresql://localhost:5432/berkut-app
     username: postgres
