@@ -14,4 +14,7 @@ public class TokenDTO implements Serializable {
 
     @JsonProperty
     private String jwt;
+
+    @JsonProperty
+    private Long id;
 }
