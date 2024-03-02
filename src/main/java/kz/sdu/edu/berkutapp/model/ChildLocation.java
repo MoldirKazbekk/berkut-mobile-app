@@ -42,7 +42,7 @@ public class ChildLocation {
     public ChildLocation(GeoData geoData) {
         this.longitude = Double.valueOf(geoData.getLongitude());
         this.latitude = Double.valueOf(geoData.getLatitude());
-        this.time = convertTimestampToDateTime(geoData.getTimestamp(), geoData.getTimezone());
+//        this.time = convertTimestampToDateTime(geoData.getTimestamp(),geoData.getTimezone());
     }
 
     private static LocalDateTime convertTimestampToDateTime(long timestampInMilliseconds, String timeZone) {

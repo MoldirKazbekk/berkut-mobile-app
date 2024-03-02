@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: berkut-app
+  datasource:
+    url: jdbc:postgresql://localhost:5432/berkut-app
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    change-log: classpath:/db/changelog/app-changelog.yaml
+  sql:
+    init:
+      continue-on-error: true
+
+server:
+  tomcat:
+    max-swallow-size: 100MB

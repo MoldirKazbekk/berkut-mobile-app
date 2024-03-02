@@ -13,7 +13,7 @@ public class GeoData implements Serializable {
 
     private String longitude;
 
-    private Long timestamp;
+    private String timestamp;
 
     private String timezone;
 

@@ -2,16 +2,12 @@ const stompClient = new StompJs.Client({
     brokerURL: 'ws://localhost:8080/ws-register'
 });
 
-let parentId = null; // Variable to store the userId
-
 stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
-    // Subscribe to the appropriate destination with the userId
-    stompClient.subscribe(
-        "/user/" + parentId + "/user/child-geo", (greeting) => {
-            showGreeting(JSON.parse(greeting.body).username +" "+ JSON.parse(greeting.body).latitude+" "+JSON.parse(greeting.body).longitude);
-        });
+    stompClient.subscribe('/topic/greetings', (greeting) => {
+        showGreeting(JSON.parse(greeting.body).content);
+    });
 };
 
 stompClient.onWebSocketError = (error) => {
@@ -36,8 +32,6 @@ function setConnected(connected) {
 }
 
 function connect() {
-    // Get the userId from the input field
-    parentId = $("#parentId").val();
     stompClient.activate();
 }
 
@@ -47,22 +41,10 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendGeoData() {
-    console.log("starting to send");
-    var geoData =
-        {
-            userId: $("#userId").val(),
-            latitude: "37.7749",
-            longitude: "122.4194",
-            timestamp: "2024-03-01T15:45:00",
-            timezone: "PST",
-            username: $("#username").val(),
-            battery: "1"
-        };
-
+function sendName() {
     stompClient.publish({
-        destination: "/geo",
-        body: JSON.stringify(geoData)
+        destination: "/app/hello",
+        body: JSON.stringify({'name': $("#name").val()})
     });
 }
 
@@ -74,5 +56,6 @@ $(function () {
     $("form").on('submit', (e) => e.preventDefault());
     $( "#connect" ).click(() => connect());
     $( "#disconnect" ).click(() => disconnect());
-    $( "#send" ).click(() => sendGeoData());
+    $( "#send" ).click(() => sendName());
 });
+

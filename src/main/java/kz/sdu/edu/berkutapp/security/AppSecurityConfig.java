@@ -44,12 +44,13 @@ public class AppSecurityConfig {
 
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/otc/**", "/auth/refresh", "/otc/sign-in", "/geo")
-                                .permitAll()
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated())
+                                .anyRequest().permitAll())
+//                                .requestMatchers("/otc/**", "/auth/refresh", "/otc/sign-in", "/geo")
+//                                .permitAll()
+//                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+//                                .permitAll()
+//                                .anyRequest())
+//                                .authenticated())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .build();
     }
