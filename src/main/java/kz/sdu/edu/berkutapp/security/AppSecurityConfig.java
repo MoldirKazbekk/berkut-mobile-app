@@ -28,10 +28,12 @@ public class AppSecurityConfig {
         configuration.setAllowCredentials(true);
         return configuration;
     }
+
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtFilter jwtFilter) throws Exception {
         return httpSecurity
@@ -44,7 +46,7 @@ public class AppSecurityConfig {
 
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/otc/**", "/auth/refresh", "/otc/sign-in", "/app/geo", "/ws-connection")
+                                .requestMatchers("/otc/**", "/auth/refresh", "/otc/sign-in", "/ws-connection")
                                 .permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
                                 .permitAll()

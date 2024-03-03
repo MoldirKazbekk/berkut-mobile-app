@@ -28,14 +28,11 @@ public class ChildLocationService {
     @Transactional
     public void sendLocation(GeoData geoData) {
         geoData = saveLocation(geoData);
-        List<AppUser> parents = appUserRepository.getParentsByChildId(Long.valueOf(geoData.getUserId()));
+        List<AppUser> parents = appUserRepository.getParentsByChildId(geoData.getUserId());
         log.info("number of parents: {}", parents.size());
         for (AppUser parent : parents) {
             log.info("sending to parent: {}", parent.getUsername());
-            messagingTemplate.convertAndSendToUser(
-                    parent.getId().toString(),
-                    "/user/child-geo",
-                    geoData);
+            messagingTemplate.convertAndSendToUser(parent.getId().toString(), "/geo-data", geoData);
         }
     }
 

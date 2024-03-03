@@ -1,6 +1,7 @@
 package kz.sdu.edu.berkutapp.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.DefaultContentTypeResolver;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -23,24 +24,27 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOrigins("*")
                 .setHandshakeHandler(new DefaultHandshakeHandler());
     }
-    //1 - connection https://berkut-.../ws-register
-    //2- subscribe  /user/1/child-geo
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/user"); //in-memory based message broker to carry the messages back to the client on dest prefix
-//        registry.setUserDestinationPrefix("/user"); // user destination prefix
-        registry.setApplicationDestinationPrefixes("/app"); // prefix for handling messages in message-mapping controller
+        registry.setUserDestinationPrefix("/user"); // user destination prefix
     }
 
     @Override
     public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
+        messageConverters.add(messageConverter());
+        return false;
+    }
+
+    @Bean
+    public MessageConverter messageConverter() {
         DefaultContentTypeResolver contentTypeResolver = new DefaultContentTypeResolver();
         contentTypeResolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setObjectMapper(new ObjectMapper());
         converter.setContentTypeResolver(contentTypeResolver);
-        messageConverters.add(converter);
-        return false;
+        return converter;
     }
+
 }
