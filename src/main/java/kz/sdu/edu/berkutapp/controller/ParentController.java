@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/parents/{parent_id}")
 public class ParentController {
     private final ParentService parentService;
-
+    // change to token
     @PostMapping
     public void addChild(@PathVariable("parent_id") Long parentId, @RequestParam("child_id") Long childId) {
         parentService.addChild(parentId, childId);

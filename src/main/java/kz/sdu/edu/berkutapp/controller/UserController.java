@@ -26,6 +26,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/users/{id}")
 @Slf4j
+// delete id + username
 public class UserController {
     private final UserService userService;
 

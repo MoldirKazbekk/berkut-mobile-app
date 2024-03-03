@@ -9,7 +9,7 @@ stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     // Subscribe to the appropriate destination with the userId
     stompClient.subscribe(
-        "/user/" + parentId + "/user/child-geo", (greeting) => {
+        "/user/" + userId + "/user/child-geo", (greeting) => {
             showGreeting(JSON.parse(greeting.body).username +" "+ JSON.parse(greeting.body).latitude+" "+JSON.parse(greeting.body).longitude);
         });
 };
@@ -56,11 +56,10 @@ function sendGeoData() {
             longitude: "122.4194",
             timestamp: "2024-03-01T15:45:00",
             timezone: "PST",
-            username: $("#username").val(),
             battery: "1"
         };
 
-    stompClient.publish({
+        stompClient.publish({
         destination: "/geo",
         body: JSON.stringify(geoData)
     });

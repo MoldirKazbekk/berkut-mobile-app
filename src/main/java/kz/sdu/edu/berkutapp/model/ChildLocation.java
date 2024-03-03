@@ -45,8 +45,9 @@ public class ChildLocation {
 //        this.time = convertTimestampToDateTime(geoData.getTimestamp(),geoData.getTimezone());
     }
 
-    private static LocalDateTime convertTimestampToDateTime(long timestampInMilliseconds, String timeZone) {
-        Instant instant = Instant.ofEpochMilli(timestampInMilliseconds);
-        return LocalDateTime.ofInstant(instant, ZoneId.of(timeZone)); //Asia/ALmaty
+    private static LocalDateTime convertTimestampToDateTime(String timestamp, String timeZone) {
+        long timestampInMilliseconds = Instant.parse(timestamp).toEpochMilli();
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestampInMilliseconds), ZoneId.of(timeZone));
+        //Asia/ALmaty
     }
 }
