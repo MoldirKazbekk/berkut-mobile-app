@@ -1,4 +1,4 @@
-package kz.sdu.edu.berkutapp.configs;
+package kz.sdu.edu.berkutapp.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +10,7 @@ import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import java.util.List;
 
@@ -18,16 +19,18 @@ import java.util.List;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-register");
-//                .setAllowedOrigins("*")
-//                .withSockJS();
+        registry.addEndpoint("/ws-connection")
+                .setAllowedOrigins("*")
+                .setHandshakeHandler(new DefaultHandshakeHandler());
     }
+    //1 - connection https://berkut-.../ws-register
+    //2- subscribe  /user/1/child-geo
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setUserDestinationPrefix("/user");
-        registry.enableSimpleBroker("/user");
-//        registry.setApplicationDestinationPrefixes("/app");
+        registry.enableSimpleBroker("/user"); //in-memory based message broker to carry the messages back to the client on dest prefix
+//        registry.setUserDestinationPrefix("/user"); // user destination prefix
+        registry.setApplicationDestinationPrefixes("/app"); // prefix for handling messages in message-mapping controller
     }
 
     @Override

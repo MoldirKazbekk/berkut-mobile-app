@@ -20,4 +20,5 @@ public class GeoData implements Serializable {
     private String username;
 
     private Integer battery;
+
 }
