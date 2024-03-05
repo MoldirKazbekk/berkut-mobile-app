@@ -34,7 +34,7 @@ public class AppUser {
     private String phoneNumber;
 
     @Column(name = "image", columnDefinition = "bytea")
-    private byte[] image;
+    private String image;
 
     @Column
     @Enumerated(EnumType.STRING)

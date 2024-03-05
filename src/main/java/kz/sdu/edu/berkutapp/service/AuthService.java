@@ -26,7 +26,11 @@ public class AuthService {
     public TokenDTO signIn(VerificationRequest verificationRequest) {
         AppUser appUser = appUserRepository.findByPhoneNumber(verificationRequest.getPhoneNumber())
                 .orElseGet(() -> createAppUser(verificationRequest));
+
+        appUserRepository.save(appUser);
+
         Long id = appUser.getId();
+
         String jwt = jwtUtil.generateToken(appUser);
         var refreshToken = refreshTokenService.getOrCreateRefreshToken(appUser);
         return TokenDTO.builder()
