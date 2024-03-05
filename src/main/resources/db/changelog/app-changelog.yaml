@@ -29,3 +29,10 @@ databaseChangeLog:
         - sqlFile:
             path: changes/V6_create_child_location.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 3
+      author: Moldir
+      changes:
+        - sqlFile:
+            path: changes/V7_create_hotline_numbers.sql
+            relativeToChangelogFile: true

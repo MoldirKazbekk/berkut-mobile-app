@@ -1,5 +1,6 @@
 package kz.sdu.edu.berkutapp.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,6 +23,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "app_user")
+
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //the value of the primary key is automatically generated.
@@ -33,8 +35,8 @@ public class AppUser {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "image", columnDefinition = "bytea")
-    private String image;
+    @Column(name = "image_id")
+    private String imageId;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -42,6 +44,9 @@ public class AppUser {
 
     @OneToMany(mappedBy = "child", fetch = FetchType.EAGER)
     private Set<ChildLocation> childLocations = new HashSet<>();
+
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
+    private Set<HotlineNumber> hotlineNumbers = new HashSet<>();
 
     @ManyToMany
     @JoinTable(

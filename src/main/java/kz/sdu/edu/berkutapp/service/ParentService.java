@@ -26,9 +26,8 @@ public class ParentService {
                 && !parent.getChildren().contains(child)) {
             parent.getChildren().add(child);
             appUserRepository.save(parent);
-            QRInfo qrInfo = new QRInfo(parent);
-            // user/child-id/qr-info subscribe while rendering QR-code
-            messagingTemplate.convertAndSendToUser(child.getId().toString(), "/qr-info", qrInfo);
+            // /user/child-id/qr-info subscribe while rendering QR-code
+            messagingTemplate.convertAndSendToUser(child.getId().toString(), "/qr-info", new QRInfo(parent));
         }
     }
 }

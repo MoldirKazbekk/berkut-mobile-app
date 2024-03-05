@@ -4,7 +4,7 @@ CREATE TABLE app_user
     username     VARCHAR(255) NOT NULL,
     phone_number VARCHAR(20)  NOT NULL,
     role         VARCHAR(20)  NOT NULL,
-    image        VARCHAR(50),
+    image_id        VARCHAR(50),
     constraint unique_phone UNIQUE (phone_number)
 );
 

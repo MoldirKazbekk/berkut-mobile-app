@@ -18,3 +18,8 @@ spring:
 server:
   tomcat:
     max-swallow-size: 100MB
+
+google-drive:
+  credentials:
+    path: /credentials.json
+  folder-id: ${FOLDER_ID:1evQ8SrfFK4b3h_5O47tjwzfa4H5k5rE4}
