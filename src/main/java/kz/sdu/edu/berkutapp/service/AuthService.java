@@ -9,6 +9,7 @@ import kz.sdu.edu.berkutapp.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,24 +22,30 @@ public class AuthService {
 
     private final RefreshTokenService refreshTokenService;
 
+    @Transactional
     public TokenDTO signIn(VerificationRequest verificationRequest) {
         AppUser appUser = appUserRepository.findByPhoneNumber(verificationRequest.getPhoneNumber())
                 .orElseGet(() -> createAppUser(verificationRequest));
+
         appUserRepository.save(appUser);
+
+        Long id = appUser.getId();
+
         String jwt = jwtUtil.generateToken(appUser);
         var refreshToken = refreshTokenService.getOrCreateRefreshToken(appUser);
         return TokenDTO.builder()
                 .refreshToken(refreshToken.getToken())
                 .jwt(jwt)
+                .id(id)
                 .build();
     }
 
-    private AppUser createAppUser(VerificationRequest verificationRequest) {
+    public AppUser createAppUser(VerificationRequest verificationRequest) {
         AppUser appUser = new AppUser();
         appUser.setUsername(verificationRequest.getUsername());
         appUser.setPhoneNumber(verificationRequest.getPhoneNumber());
         appUser.setRole(verificationRequest.getRole());
-        return appUser;
+        return appUserRepository.save(appUser);
     }
 
     public String refreshJWT(String refreshToken) {

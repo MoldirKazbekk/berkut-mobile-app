@@ -37,7 +37,7 @@ public class OTCController {
     @Operation(summary = "If phone number is successfully verified, signIn the user(PARENT/CHILD) with specified data")
     @ApiResponses(value = {@ApiResponse(responseCode = "404", description = "User with phone number already registered"),
             @ApiResponse(responseCode = "400", description = "Pin code is not correct or has expired")})
-    public ResponseEntity<TokenDTO> verifyAndRegister(@RequestBody VerificationRequest verificationRequest) {
+    public ResponseEntity<TokenDTO> signIn(@RequestBody VerificationRequest verificationRequest) {
         boolean isVerifiedUser = verificationService.verifyUserOTP(verificationRequest);
         if (isVerifiedUser) {
             var tokenDTO = authService.signIn(verificationRequest);

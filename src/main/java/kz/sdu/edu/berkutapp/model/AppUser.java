@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import lombok.Data;
@@ -39,13 +40,13 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private UserType role;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "child", fetch = FetchType.EAGER)
+    private Set<ChildLocation> childLocations = new HashSet<>();
+
+    @ManyToMany
     @JoinTable(
-            name = "user_relationship", schema = "public",
+            name = "user_relationship",
             joinColumns = @JoinColumn(name = "parent_id"),
             inverseJoinColumns = @JoinColumn(name = "child_id"))
     private Set<AppUser> children = new HashSet<>();
-
-    @ManyToMany(mappedBy = "children", fetch = FetchType.EAGER)
-    Set<AppUser> parents = new HashSet<>();
 }
