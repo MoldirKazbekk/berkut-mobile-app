@@ -35,6 +35,16 @@ public class ChildLocationService {
             messagingTemplate.convertAndSendToUser(parent.getId().toString(), "/geo-data", geoData);
         }
     }
+    @Transactional
+    public void sendLocationTest(GeoData geoData) {
+       // geoData = saveLocation(geoData);
+//        List<AppUser> parents = appUserRepository.getParentsByChildId(1L);
+//        log.info("number of parents: {}", parents.size());
+//        for (AppUser parent : parents) {
+            log.info("sending to parent: {1}");
+            messagingTemplate.convertAndSendToUser("1", "/geo-data", geoData);
+//        }
+    }
 
     public GeoData saveLocation(GeoData geoData) {
         AppUser child = appUserRepository.findById(geoData.getUserId()).orElseThrow();

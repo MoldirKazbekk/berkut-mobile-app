@@ -47,6 +47,7 @@ public class HotlineNumberService {
     @Transactional
     public void addNumberToAllChildren(NumberDTO numberDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        log.info(authentication);
         AppUser parent = appUserRepository.findById((Long) authentication.getPrincipal()).orElseThrow();
         for (AppUser child : parent.getChildren()) {
             child.getHotlineNumbers().add(new HotlineNumber(numberDTO));

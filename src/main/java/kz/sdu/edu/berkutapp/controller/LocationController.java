@@ -19,4 +19,10 @@ public class LocationController {
     public void processGeolocation(@RequestBody GeoData geoData) {
         childLocationService.sendLocation(geoData);
     }
+
+    @PostMapping("/test")
+    public void staticGeo(@RequestBody GeoData geoData) {
+        childLocationService.sendLocationTest(geoData);
+    }
+
 }
