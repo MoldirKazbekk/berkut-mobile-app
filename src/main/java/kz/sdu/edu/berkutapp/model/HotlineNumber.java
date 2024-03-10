@@ -26,7 +26,7 @@ public class HotlineNumber {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "child_id")
     private AppUser child;
 
     public HotlineNumber(NumberDTO numberDTO){
