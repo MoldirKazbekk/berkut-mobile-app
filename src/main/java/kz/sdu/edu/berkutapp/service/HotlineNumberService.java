@@ -28,8 +28,9 @@ public class HotlineNumberService {
     public List<NumberDTO> getListOfNumbers(Long childId) {
         List<NumberDTO> numberDTOS = new ArrayList<>();
         List<AppUser> parents = appUserRepository.getParentsByChildId(childId);
-        parents.forEach(parent -> numberDTOS.add(new NumberDTO(parent.getPhoneNumber(), parent.getUsername())));
-        AppUser child = appUserRepository.findBiId(childId).orElseThrow();
+        parents.forEach(parent -> numberDTOS.add(new NumberDTO(parent
+                .getPhoneNumber(), parent.getUsername())));
+        AppUser child = appUserRepository.findById(childId).orElseThrow();
         log.info("child by id {} has hotline numbers: {}", childId, child.getHotlineNumbers().size());
         child.getHotlineNumbers().forEach(number -> numberDTOS.add(new NumberDTO(number)));
         return numberDTOS;
