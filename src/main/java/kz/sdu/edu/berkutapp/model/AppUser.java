@@ -54,4 +54,6 @@ public class AppUser {
             joinColumns = @JoinColumn(name = "parent_id"),
             inverseJoinColumns = @JoinColumn(name = "child_id"))
     private Set<AppUser> children = new HashSet<>();
+
+
 }

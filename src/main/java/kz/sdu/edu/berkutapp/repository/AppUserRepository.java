@@ -17,4 +17,5 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             " on app_user.id = ur.parent_id\n" +
             "where ur.child_id = :childId")
     List<AppUser> getParentsByChildId(@Param("childId") Long childId);
+
 }

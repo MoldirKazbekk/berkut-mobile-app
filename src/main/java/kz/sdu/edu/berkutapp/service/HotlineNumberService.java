@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class HotlineNumberService {
         List<NumberDTO> numberDTOS = new ArrayList<>();
         List<AppUser> parents = appUserRepository.getParentsByChildId(childId);
         parents.forEach(parent -> numberDTOS.add(new NumberDTO(parent.getPhoneNumber(), parent.getUsername())));
-        AppUser child = appUserRepository.findById(childId).orElseThrow();
+        AppUser child = appUserRepository.findBiId(childId).orElseThrow();
         log.info("child by id {} has hotline numbers: {}", childId, child.getHotlineNumbers().size());
         child.getHotlineNumbers().forEach(number -> numberDTOS.add(new NumberDTO(number)));
         return numberDTOS;
@@ -36,8 +37,10 @@ public class HotlineNumberService {
 
     @Transactional
     public void addNumber(Long childId, NumberDTO numberDTO) {
+        log.info("in add child");
         HotlineNumber hotlineNumber = new HotlineNumber(numberDTO);
         AppUser appUser = appUserRepository.findById(childId).orElseThrow();
+        log.info("child id : "+appUser.getUsername());
         if (appUser.getRole() == UserType.CHILD) {
             hotlineNumber.setChild(appUser);
             hotlineNumberRepository.save(hotlineNumber);
@@ -47,12 +50,16 @@ public class HotlineNumberService {
     @Transactional
     public void addNumberToAllChildren(NumberDTO numberDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        log.info(authentication);
-        AppUser parent = appUserRepository.findById((Long) authentication.getPrincipal()).orElseThrow();
+        Long parentId = Long.valueOf((String) authentication.getPrincipal());
+
+        log.info(String.valueOf(parentId));
+        AppUser parent = appUserRepository.findById(parentId).orElseThrow();
         for (AppUser child : parent.getChildren()) {
-            child.getHotlineNumbers().add(new HotlineNumber(numberDTO));
+            HotlineNumber hotlineNumber = new HotlineNumber(numberDTO);
+            hotlineNumber.setChild(child);
+            hotlineNumberRepository.save(hotlineNumber);
         }
-        appUserRepository.save(parent);
+
     }
 
     @Transactional

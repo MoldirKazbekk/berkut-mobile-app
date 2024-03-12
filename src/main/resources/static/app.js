@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://localhost:8080/ws-register'
+    brokerURL: 'ws://localhost:8080/ws-connection'
 });
 
 let parentId = null; // Variable to store the userId
@@ -9,7 +9,7 @@ stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     // Subscribe to the appropriate destination with the userId
     stompClient.subscribe(
-        "/user/" + userId + "/user/child-geo", (greeting) => {
+        "/user/" + userId + "/geo-data", (greeting) => {
             showGreeting(JSON.parse(greeting.body).username +" "+ JSON.parse(greeting.body).latitude+" "+JSON.parse(greeting.body).longitude);
         });
 };
@@ -60,7 +60,7 @@ function sendGeoData() {
         };
 
         stompClient.publish({
-        destination: "/geo",
+        destination: "/child-geo",
         body: JSON.stringify(geoData)
     });
 }

@@ -52,6 +52,8 @@ public class AppSecurityConfig {
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
+//                                .anyRequest()
+//                                .permitAll())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .build();
     }
