@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-
 @Table(name = "hotline_number")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,10 +24,11 @@ public class HotlineNumber {
 
     @ManyToOne
     @JoinColumn(name = "child_id")
-    private AppUser child;
+    AppUser child;
 
     public HotlineNumber(NumberDTO numberDTO){
         this.phoneNumber = numberDTO.getPhoneNumber();
         this.name = numberDTO.getName();
+
     }
 }
