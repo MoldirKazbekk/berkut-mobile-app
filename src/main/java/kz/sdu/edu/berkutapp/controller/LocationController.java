@@ -19,7 +19,4 @@ public class LocationController {
     public void processGeolocation(@RequestBody GeoData geoData) {
         childLocationService.sendLocation(geoData);
     }
-
-
-
 }

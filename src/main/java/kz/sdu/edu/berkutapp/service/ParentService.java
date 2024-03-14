@@ -2,12 +2,9 @@ package kz.sdu.edu.berkutapp.service;
 
 import jakarta.transaction.Transactional;
 import kz.sdu.edu.berkutapp.model.AppUser;
-import kz.sdu.edu.berkutapp.model.HotlineNumber;
-import kz.sdu.edu.berkutapp.model.dto.NumberDTO;
 import kz.sdu.edu.berkutapp.model.dto.QRInfo;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import kz.sdu.edu.berkutapp.repository.AppUserRepository;
-import kz.sdu.edu.berkutapp.repository.HotlineNumberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ParentService {
     private final SimpMessagingTemplate messagingTemplate;
-    private final HotlineNumberRepository hotlineNumberRepository;
 
     private final AppUserRepository appUserRepository;
 

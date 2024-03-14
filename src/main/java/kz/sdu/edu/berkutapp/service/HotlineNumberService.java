@@ -32,9 +32,10 @@ public class HotlineNumberService {
         // Retrieve parent numbers
         List<AppUser> parents = appUserRepository.getParentsByChildId(childId);
         parents.forEach(parent -> numberDTOS.add(new NumberDTO(parent.getPhoneNumber(), parent.getUsername())));
-        log.info("only parents number "+parents.size());
+        log.info("only parents number " + parents.size());
         // Retrieve child numbers
-        hotlineNumberRepository.findNumbersByChildId(childId).forEach(number -> numberDTOS.add(new NumberDTO(number)));
+        appUserRepository.findById(childId).orElseThrow()
+                .getHotlineNumbers().forEach(number -> numberDTOS.add(new NumberDTO(number)));
         log.info("Child with id {} has hotline numbers: {}", childId, hotlineNumberRepository.findNumbersByChildId(childId).size());
         return numberDTOS;
     }
@@ -43,13 +44,11 @@ public class HotlineNumberService {
     public void addNumber(Long childId, NumberDTO numberDTO) {
         log.info("in add child");
         AppUser appUser = appUserRepository.findById(childId).orElseThrow();
-        log.info("child id : "+appUser.getUsername());
+        log.info("child id : " + appUser.getUsername());
         if (appUser.getRole() == UserType.CHILD) {
             HotlineNumber hotlineNumber = new HotlineNumber(numberDTO);
             hotlineNumber.setChild(appUser);
             hotlineNumberRepository.save(hotlineNumber);
-
-
         }
     }
 
@@ -68,15 +67,13 @@ public class HotlineNumberService {
 
     @Transactional
     public void deleteNumber(Long childId, NumberDTO numberDTO) {
-        // 1-st way
+        // 1-st way (working)
         hotlineNumberRepository.deleteByPhoneNumberAndNameAndChild_Id(numberDTO.getPhoneNumber(),
                 numberDTO.getName(), childId);
-        //2-nd way
+        //2-nd way (working)
 //        AppUser appUser = appUserRepository.findById(childId).orElseThrow();
 //        appUser.getHotlineNumbers()
 //                .removeIf(ht -> ht.getPhoneNumber().equals(numberDTO.getPhoneNumber()) &&
 //                        ht.getName().equals(numberDTO.getName()));
-//        //todo - question: do I need to save explicitly?
-//        appUserRepository.save(appUser);
     }
 }

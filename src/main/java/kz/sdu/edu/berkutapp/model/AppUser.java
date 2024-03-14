@@ -16,14 +16,17 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "app_user")
-
+@NoArgsConstructor
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //the value of the primary key is automatically generated.
@@ -42,11 +45,11 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private UserType role;
 
-    @OneToMany(mappedBy = "child", fetch = FetchType.EAGER)
-    private Set<ChildLocation> childLocations = new HashSet<>();
+    @OneToMany(mappedBy = "child")
+    private List<ChildLocation> childLocations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
-    private Set<HotlineNumber> hotlineNumbers = new HashSet<>();
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HotlineNumber> hotlineNumbers;
 
     @ManyToMany
     @JoinTable(
@@ -54,6 +57,4 @@ public class AppUser {
             joinColumns = @JoinColumn(name = "parent_id"),
             inverseJoinColumns = @JoinColumn(name = "child_id"))
     private Set<AppUser> children = new HashSet<>();
-
-
 }
