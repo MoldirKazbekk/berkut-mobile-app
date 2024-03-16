@@ -2,7 +2,9 @@ package kz.sdu.edu.berkutapp.service;
 
 import jakarta.transaction.Transactional;
 import kz.sdu.edu.berkutapp.model.AppUser;
+import kz.sdu.edu.berkutapp.model.SavedLocation;
 import kz.sdu.edu.berkutapp.model.dto.QRInfo;
+import kz.sdu.edu.berkutapp.model.dto.SavedLocationDTO;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import kz.sdu.edu.berkutapp.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +24,16 @@ public class ParentService {
     public void addChild(Long parentId, Long childId) {
         AppUser parent = appUserRepository.findById(parentId).orElseThrow();
         AppUser child = appUserRepository.findById(childId).orElseThrow();
-        if (child.getRole() == UserType.CHILD && parent.getRole() == UserType.PARENT
-                && !parent.getChildren().contains(child)) {
+        if (child.getRole() == UserType.CHILD && parent.getRole() == UserType.PARENT) {
             parent.getChildren().add(child);
-            appUserRepository.save(parent);
             // /user/child-id/qr-info subscribe while rendering QR-code
             messagingTemplate.convertAndSendToUser(child.getId().toString(), "/qr-info", new QRInfo(parent));
         }
+    }
+
+    @Transactional
+    public void addSavedLocation(SavedLocationDTO savedLocationDTO) {
+        AppUser parent = appUserRepository.findById(savedLocationDTO.getParentId()).orElseThrow();
+        parent.addSavedLocation(new SavedLocation(savedLocationDTO));
     }
 }

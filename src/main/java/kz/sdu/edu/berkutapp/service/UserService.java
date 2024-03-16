@@ -65,4 +65,7 @@ public class UserService {
         return new UserDTO(user);
     }
 
+    public void deleteUser(Long userId) {
+        appUserRepository.deleteById(userId);
+    }
 }

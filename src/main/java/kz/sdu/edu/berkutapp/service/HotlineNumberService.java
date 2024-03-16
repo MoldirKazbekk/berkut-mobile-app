@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -42,13 +41,10 @@ public class HotlineNumberService {
 
     @Transactional
     public void addNumber(Long childId, NumberDTO numberDTO) {
-        log.info("in add child");
         AppUser appUser = appUserRepository.findById(childId).orElseThrow();
         log.info("child id : " + appUser.getUsername());
         if (appUser.getRole() == UserType.CHILD) {
-            HotlineNumber hotlineNumber = new HotlineNumber(numberDTO);
-            hotlineNumber.setChild(appUser);
-            hotlineNumberRepository.save(hotlineNumber);
+            appUser.addHotlineNumber(new HotlineNumber(numberDTO));
         }
     }
 
@@ -58,22 +54,19 @@ public class HotlineNumberService {
         Long parentId = Long.valueOf((String) authentication.getPrincipal());
         AppUser parent = appUserRepository.findById(parentId).orElseThrow();
         for (AppUser child : parent.getChildren()) {
-            HotlineNumber hotlineNumber = new HotlineNumber(numberDTO);
-            hotlineNumber.setChild(child);
-            hotlineNumberRepository.save(hotlineNumber);
+            child.addHotlineNumber(new HotlineNumber(numberDTO));
         }
-
     }
 
     @Transactional
     public void deleteNumber(Long childId, NumberDTO numberDTO) {
         // 1-st way (working)
-        hotlineNumberRepository.deleteByPhoneNumberAndNameAndChild_Id(numberDTO.getPhoneNumber(),
-                numberDTO.getName(), childId);
+//        hotlineNumberRepository.deleteByPhoneNumberAndNameAndChild_Id(numberDTO.getPhoneNumber(),
+//                numberDTO.getName(), childId);
         //2-nd way (working)
-//        AppUser appUser = appUserRepository.findById(childId).orElseThrow();
-//        appUser.getHotlineNumbers()
-//                .removeIf(ht -> ht.getPhoneNumber().equals(numberDTO.getPhoneNumber()) &&
-//                        ht.getName().equals(numberDTO.getName()));
+        AppUser appUser = appUserRepository.findById(childId).orElseThrow();
+        appUser.getHotlineNumbers()
+                .removeIf(ht -> ht.getPhoneNumber().equals(numberDTO.getPhoneNumber()) &&
+                        ht.getName().equals(numberDTO.getName()));
     }
 }

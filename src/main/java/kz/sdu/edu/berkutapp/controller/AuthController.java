@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 @Slf4j
 public class AuthController {
+
     private final AuthService authService;
 
     @Operation(summary = "Generate new access token by provided refresh and expired access tokens")

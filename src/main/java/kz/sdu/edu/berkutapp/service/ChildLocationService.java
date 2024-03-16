@@ -5,7 +5,6 @@ import kz.sdu.edu.berkutapp.model.ChildLocation;
 import kz.sdu.edu.berkutapp.model.dto.GeoData;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import kz.sdu.edu.berkutapp.repository.AppUserRepository;
-import kz.sdu.edu.berkutapp.repository.ChildLocationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -23,8 +22,6 @@ public class ChildLocationService {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    private final ChildLocationRepository childLocationRepository;
-
     @Transactional
     public void sendLocation(GeoData geoData) {
         geoData = saveLocation(geoData);
@@ -40,9 +37,7 @@ public class ChildLocationService {
     public GeoData saveLocation(GeoData geoData) {
         AppUser child = appUserRepository.findById(geoData.getUserId()).orElseThrow();
         if (child.getRole() == UserType.CHILD) {
-            var childLocation = new ChildLocation(geoData);
-            childLocation.setChild(child);
-            childLocationRepository.save(childLocation);
+            child.addChildLocation(new ChildLocation(geoData));
             geoData.setUsername(child.getUsername());
         }
         return geoData;

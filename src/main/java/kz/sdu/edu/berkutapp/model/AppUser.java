@@ -5,7 +5,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,7 +17,6 @@ import kz.sdu.edu.berkutapp.model.dto.UserType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,16 +43,33 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private UserType role;
 
-    @OneToMany(mappedBy = "child")
-    private List<ChildLocation> childLocations = new ArrayList<>();
+    @OneToMany(mappedBy = "child", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ChildLocation> childLocations;
 
-    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "child", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<HotlineNumber> hotlineNumbers;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "parent", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<SavedLocation> savedLocations;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_relationship",
             joinColumns = @JoinColumn(name = "parent_id"),
             inverseJoinColumns = @JoinColumn(name = "child_id"))
     private Set<AppUser> children = new HashSet<>();
+
+    public void addSavedLocation(SavedLocation savedLocation) {
+        savedLocation.setParent(this);
+        this.getSavedLocations().add(savedLocation);
+    }
+
+    public void addHotlineNumber(HotlineNumber hotlineNumber) {
+        hotlineNumber.setChild(this);
+        this.getHotlineNumbers().add(hotlineNumber);
+    }
+    public void addChildLocation(ChildLocation childLocation) {
+        childLocation.setChild(this);
+        this.getChildLocations().add(childLocation);
+    }
 }

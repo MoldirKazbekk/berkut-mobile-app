@@ -1,0 +1,1 @@
+alter table saved_location ADD COLUMN radius INT default 25;

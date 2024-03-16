@@ -36,3 +36,10 @@ databaseChangeLog:
         - sqlFile:
             path: changes/V7_create_hotline_numbers.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 4
+      author: Moldir
+      changes:
+        - sqlFile:
+            path: changes/V8_alter_saved_locations.sql
+            relativeToChangelogFile: true

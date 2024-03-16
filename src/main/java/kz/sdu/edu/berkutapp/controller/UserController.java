@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,13 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users/{id}")
 @Slf4j
-// delete id + username
 public class UserController {
 
     private final UserService userService;
@@ -44,8 +43,13 @@ public class UserController {
     @PutMapping("setImage")
     public boolean updateUserData(@NotNull @RequestParam(value = "image", required = false) MultipartFile image,
                                   @RequestParam(name = "username", required = false) String newUsername,
-                                  @PathVariable("id") Long id) throws IOException, GeneralSecurityException {
+                                  @PathVariable("id") Long id) throws IOException {
         return userService.updateUserData(id, image, newUsername);
+    }
+
+    @DeleteMapping
+    public void deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
     }
 }
 
