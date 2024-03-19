@@ -1,12 +1,16 @@
 package kz.sdu.edu.berkutapp.controller;
 
+import kz.sdu.edu.berkutapp.model.SavedLocation;
 import kz.sdu.edu.berkutapp.model.dto.GeoData;
+import kz.sdu.edu.berkutapp.model.dto.SavedLocationDTO;
 import kz.sdu.edu.berkutapp.service.ChildLocationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 
 @RequiredArgsConstructor
@@ -19,4 +23,9 @@ public class LocationController {
     public void processGeolocation(@RequestBody GeoData geoData) {
         childLocationService.sendLocation(geoData);
     }
+    @GetMapping("/getSavedLocation/{child-id}")
+    public ResponseEntity<List<SavedLocationDTO>> getListOfSavedLocations(@PathVariable("child-id") Long childId) {
+        return ResponseEntity.ok(childLocationService.getNearestSavedLocation(childId));
+    }
 }
+

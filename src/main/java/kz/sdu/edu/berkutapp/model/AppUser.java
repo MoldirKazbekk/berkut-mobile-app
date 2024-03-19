@@ -1,18 +1,6 @@
 package kz.sdu.edu.berkutapp.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,7 +37,7 @@ public class AppUser {
     @OneToMany(mappedBy = "child", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<HotlineNumber> hotlineNumbers;
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent",fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<SavedLocation> savedLocations;
 
     @ManyToMany(cascade = CascadeType.PERSIST)

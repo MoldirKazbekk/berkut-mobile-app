@@ -32,8 +32,8 @@ public class ParentService {
     }
 
     @Transactional
-    public void addSavedLocation(SavedLocationDTO savedLocationDTO) {
-        AppUser parent = appUserRepository.findById(savedLocationDTO.getParentId()).orElseThrow();
+    public void addSavedLocation(SavedLocationDTO savedLocationDTO,Long parentId) {
+        AppUser parent = appUserRepository.findById(parentId).orElseThrow();
         parent.addSavedLocation(new SavedLocation(savedLocationDTO));
     }
 }

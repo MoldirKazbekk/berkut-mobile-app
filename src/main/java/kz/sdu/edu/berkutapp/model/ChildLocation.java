@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Data
@@ -27,8 +28,8 @@ public class ChildLocation {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "child_id")
-    AppUser child;
+    @JoinColumn(name = "child_id", nullable = false)
+    private AppUser child;
 
     @Column
     private LocalDateTime time;
@@ -42,12 +43,12 @@ public class ChildLocation {
     public ChildLocation(GeoData geoData) {
         this.longitude = Double.valueOf(geoData.getLongitude());
         this.latitude = Double.valueOf(geoData.getLatitude());
-//        this.time = convertTimestampToDateTime(geoData.getTimestamp(),geoData.getTimezone());
+        this.time = convertTimestampToDateTime(geoData.getTimestamp(),geoData.getTimezone());
     }
 
     private static LocalDateTime convertTimestampToDateTime(String timestamp, String timeZone) {
-        long timestampInMilliseconds = Instant.parse(timestamp).toEpochMilli();
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestampInMilliseconds), ZoneId.of(timeZone));
-        //Asia/ALmaty
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        return LocalDateTime.parse(timestamp, formatter);
+
     }
 }

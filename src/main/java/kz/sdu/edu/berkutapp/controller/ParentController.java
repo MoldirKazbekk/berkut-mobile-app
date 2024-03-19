@@ -24,8 +24,8 @@ public class ParentController {
         parentService.addChild(parentId, childId);
     }
 
-    @PostMapping
-    public void addLocation(@RequestBody SavedLocationDTO savedLocationDTO) {
-        parentService.addSavedLocation(savedLocationDTO);
+    @PostMapping("/{parent_id}/addLocation")
+    public void addLocation(@RequestBody SavedLocationDTO savedLocationDTO, @PathVariable("parent_id") Long parentId) {
+        parentService.addSavedLocation(savedLocationDTO,parentId);
     }
 }

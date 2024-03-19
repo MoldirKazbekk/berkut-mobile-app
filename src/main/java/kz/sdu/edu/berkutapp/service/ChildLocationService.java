@@ -2,15 +2,22 @@ package kz.sdu.edu.berkutapp.service;
 
 import kz.sdu.edu.berkutapp.model.AppUser;
 import kz.sdu.edu.berkutapp.model.ChildLocation;
+import kz.sdu.edu.berkutapp.model.SavedLocation;
 import kz.sdu.edu.berkutapp.model.dto.GeoData;
+import kz.sdu.edu.berkutapp.model.dto.SavedLocationDTO;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import kz.sdu.edu.berkutapp.repository.AppUserRepository;
+import kz.sdu.edu.berkutapp.repository.ChildLocationRepository;
+import kz.sdu.edu.berkutapp.repository.SavedLocationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -19,8 +26,10 @@ import java.util.List;
 public class ChildLocationService {
 
     private final AppUserRepository appUserRepository;
+    private final SavedLocationRepository savedLocationRepository;
 
     private final SimpMessagingTemplate messagingTemplate;
+    private  final  ChildLocationRepository childLocationRepository;
 
     @Transactional
     public void sendLocation(GeoData geoData) {
@@ -41,5 +50,33 @@ public class ChildLocationService {
             geoData.setUsername(child.getUsername());
         }
         return geoData;
+    }
+        public List<SavedLocationDTO> getNearestSavedLocation(Long childId){
+            List<SavedLocationDTO> savedLocationDTOS = new ArrayList<>();
+
+            List<AppUser> parents = appUserRepository.getParentsByChildId(childId);
+            ChildLocation lastChildLocation = childLocationRepository.findByTimeDesc(childId);
+
+            for (AppUser parent : parents) {
+                savedLocationRepository.findByParentId(parent.getId())
+                        .forEach(item->savedLocationDTOS.add(new SavedLocationDTO(item)));
+            }
+            List<SavedLocationDTO> savedLocationDTOList = new ArrayList<>(new HashSet<>(savedLocationDTOS));
+            savedLocationDTOList.sort(Comparator.comparingDouble(savedLocation ->
+                    calculateDistance(lastChildLocation.getLatitude(), lastChildLocation.getLongitude(),
+                            savedLocation.getLatitude(), savedLocation.getLongitude())));
+            return savedLocationDTOList.subList(0, Math.min(2, savedLocationDTOList.size()));
+
+        }
+
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371; // Radius of the earth in km
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Distance in km
     }
 }

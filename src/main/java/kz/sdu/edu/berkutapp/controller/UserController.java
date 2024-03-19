@@ -2,6 +2,8 @@ package kz.sdu.edu.berkutapp.controller;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import kz.sdu.edu.berkutapp.model.SavedLocation;
+import kz.sdu.edu.berkutapp.model.dto.NumberDTO;
 import kz.sdu.edu.berkutapp.model.dto.UserDTO;
 import kz.sdu.edu.berkutapp.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
