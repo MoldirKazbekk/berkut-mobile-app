@@ -4,7 +4,7 @@ databaseChangeLog:
       author: Moldir
       changes:
         - sqlFile:
-            path: changgites/V1_create_table_appUser.sql
+            path: changes/V1_create_table_appUser.sql
             relativeToChangelogFile: true
         - sqlFile:
             path: changes/V2_create_table_pin_verification.sql
