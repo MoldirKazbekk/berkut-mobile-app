@@ -42,7 +42,7 @@ public class ChildLocationService {
         }
     }
 
-
+    // get nearest 2 locations to child
     public GeoData saveLocation(GeoData geoData) {
         AppUser child = appUserRepository.findById(geoData.getUserId()).orElseThrow();
         if (child.getRole() == UserType.CHILD) {
@@ -53,15 +53,18 @@ public class ChildLocationService {
     }
         public List<SavedLocationDTO> getNearestSavedLocation(Long childId){
             List<SavedLocationDTO> savedLocationDTOS = new ArrayList<>();
-
+            // list of parentd
             List<AppUser> parents = appUserRepository.getParentsByChildId(childId);
+            //last child location
             ChildLocation lastChildLocation = childLocationRepository.findByTimeDesc(childId);
-
+            //get all lists of saved locs from all parents
             for (AppUser parent : parents) {
                 savedLocationRepository.findByParentId(parent.getId())
                         .forEach(item->savedLocationDTOS.add(new SavedLocationDTO(item)));
             }
+            //no duplicates
             List<SavedLocationDTO> savedLocationDTOList = new ArrayList<>(new HashSet<>(savedLocationDTOS));
+            //compare and sort
             savedLocationDTOList.sort(Comparator.comparingDouble(savedLocation ->
                     calculateDistance(lastChildLocation.getLatitude(), lastChildLocation.getLongitude(),
                             savedLocation.getLatitude(), savedLocation.getLongitude())));
