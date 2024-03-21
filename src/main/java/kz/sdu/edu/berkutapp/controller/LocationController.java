@@ -23,7 +23,7 @@ public class LocationController {
     public void processGeolocation(@RequestBody GeoData geoData) {
         childLocationService.sendLocation(geoData);
     }
-    @GetMapping("/getSavedLocation/{child-id}")
+    @GetMapping("/SavedLocation/{child-id}")
     public ResponseEntity<List<SavedLocationDTO>> getListOfSavedLocations(@PathVariable("child-id") Long childId) {
         return ResponseEntity.ok(childLocationService.getNearestSavedLocation(childId));
     }

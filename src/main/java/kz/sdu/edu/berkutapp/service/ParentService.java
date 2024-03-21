@@ -2,9 +2,11 @@ package kz.sdu.edu.berkutapp.service;
 
 import jakarta.transaction.Transactional;
 import kz.sdu.edu.berkutapp.model.AppUser;
+import kz.sdu.edu.berkutapp.model.ChildTask;
 import kz.sdu.edu.berkutapp.model.SavedLocation;
 import kz.sdu.edu.berkutapp.model.dto.QRInfo;
 import kz.sdu.edu.berkutapp.model.dto.SavedLocationDTO;
+import kz.sdu.edu.berkutapp.model.dto.TaskDTO;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import kz.sdu.edu.berkutapp.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +37,10 @@ public class ParentService {
     public void addSavedLocation(SavedLocationDTO savedLocationDTO,Long parentId) {
         AppUser parent = appUserRepository.findById(parentId).orElseThrow();
         parent.addSavedLocation(new SavedLocation(savedLocationDTO));
+    }
+    @Transactional
+    public void addChildTask(TaskDTO taskDTO, Long parentId) {
+        AppUser parent = appUserRepository.findById(parentId).orElseThrow();
+        parent.addChildTask(new ChildTask(taskDTO));
     }
 }

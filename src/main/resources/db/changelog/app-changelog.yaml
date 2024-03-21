@@ -4,7 +4,7 @@ databaseChangeLog:
       author: Moldir
       changes:
         - sqlFile:
-            path: changgites/V1_create_table_appUser.sql
+            path: changes/V1_create_table_appUser.sql
             relativeToChangelogFile: true
         - sqlFile:
             path: changes/V2_create_table_pin_verification.sql
@@ -42,4 +42,11 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: changes/V8_alter_saved_locations.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 5
+      author: Dayana
+      changes:
+        - sqlFile:
+            path: changes/V9_create_child_task.sql
             relativeToChangelogFile: true
