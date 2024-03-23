@@ -40,7 +40,7 @@ public class AppUser {
 
     @OneToMany(mappedBy = "parent",fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<SavedLocation> savedLocations;
-    @OneToMany(mappedBy = "parent",fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "child",fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ChildTask> childTasks;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -64,9 +64,10 @@ public class AppUser {
         this.getChildLocations().add(childLocation);
     }
     public void addChildTask(ChildTask childTask) {
-        childTask.setParent(this);
+        childTask.setChild(this);
         this.getChildTasks().add(childTask);
     }
+
 
 
 }

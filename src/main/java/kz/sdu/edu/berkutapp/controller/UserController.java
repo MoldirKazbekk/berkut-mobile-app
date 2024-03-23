@@ -45,7 +45,7 @@ public class UserController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE).body(userService.getImage(id));
     }
 
-    @PutMapping("setImage")
+        @PutMapping("setImage")
     public boolean updateUserData(@NotNull @RequestParam(value = "image", required = false) MultipartFile image,
                                   @RequestParam(name = "username", required = false) String newUsername,
                                   @PathVariable("id") Long id) throws IOException {

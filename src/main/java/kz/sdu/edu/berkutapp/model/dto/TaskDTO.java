@@ -8,16 +8,17 @@ import java.io.Serializable;
 
 @Data
 public class TaskDTO implements Serializable {
-    private String taskDescription;
+    private String name;
+    private String description;
     @Schema(defaultValue = "5")
     private Integer coins;
     private String status;
-    private String type;
+
     public TaskDTO(ChildTask childTask){
         this.coins = childTask.getCoins();
         this.status=childTask.getStatus();
-        this.taskDescription= childTask.getTaskDescription();
-        this.type= childTask.getType();
+        this.description= childTask.getDescription();
+        this.name = childTask.getName();
     }
     public TaskDTO(){
 

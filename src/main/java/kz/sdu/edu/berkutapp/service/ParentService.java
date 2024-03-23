@@ -12,6 +12,8 @@ import kz.sdu.edu.berkutapp.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,8 +41,31 @@ public class ParentService {
         parent.addSavedLocation(new SavedLocation(savedLocationDTO));
     }
     @Transactional
-    public void addChildTask(TaskDTO taskDTO, Long parentId) {
-        AppUser parent = appUserRepository.findById(parentId).orElseThrow();
-        parent.addChildTask(new ChildTask(taskDTO));
+    public void addChildTask(TaskDTO taskDTO, Long childId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser parent = appUserRepository.findById(Long.valueOf((String) authentication.getPrincipal())).orElseThrow();
+
+        AppUser child = appUserRepository.findById(childId).orElseThrow();
+        // Check if the parent has the child
+        boolean isChildOfParent = parent.getChildren().contains(child);
+        if(isChildOfParent){
+            child.addChildTask(new ChildTask(taskDTO));
+        }
+
+    }
+
+    public void deleteChildTask(TaskDTO taskDTO, Long childId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser parent = appUserRepository.findById(Long.valueOf((String) authentication.getPrincipal())).orElseThrow();
+        AppUser child = appUserRepository.findById(childId).orElseThrow();
+        // Check if the parent has the child
+        boolean isChildOfParent = parent.getChildren().contains(child);
+        if (isChildOfParent){
+            child.getChildTasks()
+                    .removeIf(cht -> cht.getName().equals(String.valueOf(taskDTO.getName())) &&
+                            cht.getDescription().equals(String.valueOf(taskDTO.getDescription())));
+            appUserRepository.save(child);
+        }
+
     }
 }
