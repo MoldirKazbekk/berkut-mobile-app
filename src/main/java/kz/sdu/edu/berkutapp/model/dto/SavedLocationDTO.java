@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class SavedLocationDTO {
-
     private Double latitude;
 
     private Double longitude;

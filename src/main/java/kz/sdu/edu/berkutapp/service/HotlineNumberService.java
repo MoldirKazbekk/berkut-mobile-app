@@ -60,13 +60,7 @@ public class HotlineNumberService {
 
     @Transactional
     public void deleteNumber(Long childId, NumberDTO numberDTO) {
-        // 1-st way (working)
-//        hotlineNumberRepository.deleteByPhoneNumberAndNameAndChild_Id(numberDTO.getPhoneNumber(),
-//                numberDTO.getName(), childId);
-        //2-nd way (working)
-        AppUser appUser = appUserRepository.findById(childId).orElseThrow();
-        appUser.getHotlineNumbers()
-                .removeIf(ht -> ht.getPhoneNumber().equals(numberDTO.getPhoneNumber()) &&
-                        ht.getName().equals(numberDTO.getName()));
+        hotlineNumberRepository.deleteByPhoneNumberAndNameAndChild_Id(numberDTO.getPhoneNumber(),
+                numberDTO.getName(), childId);
     }
 }

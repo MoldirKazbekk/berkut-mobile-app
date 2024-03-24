@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-//@PreAuthorize("hasRole(T(kz.sdu.edu.berkutapp.model.dto.UserType).PARENT.name())")
+@PreAuthorize("hasRole(T(kz.sdu.edu.berkutapp.model.dto.UserType).PARENT.name())")
 @RequestMapping("/parents")
 public class ParentController {
 
@@ -24,8 +24,8 @@ public class ParentController {
         parentService.addChild(parentId, childId);
     }
 
-    @PostMapping("/{parent_id}/addLocation")
-    public void addLocation(@RequestBody SavedLocationDTO savedLocationDTO, @PathVariable("parent_id") Long parentId) {
-        parentService.addSavedLocation(savedLocationDTO,parentId);
+    @PostMapping("/saved-locations/{parent_id}")
+    public void addLocation(@PathVariable("parent_id") Long parentId, @RequestBody SavedLocationDTO savedLocationDTO) {
+        parentService.addSavedLocation(savedLocationDTO, parentId);
     }
 }
