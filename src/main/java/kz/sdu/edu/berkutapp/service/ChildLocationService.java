@@ -2,7 +2,6 @@ package kz.sdu.edu.berkutapp.service;
 
 import kz.sdu.edu.berkutapp.model.AppUser;
 import kz.sdu.edu.berkutapp.model.ChildLocation;
-import kz.sdu.edu.berkutapp.model.SavedLocation;
 import kz.sdu.edu.berkutapp.model.dto.GeoData;
 import kz.sdu.edu.berkutapp.model.dto.SavedLocationDTO;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
@@ -14,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Set;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -42,7 +41,6 @@ public class ChildLocationService {
         }
     }
 
-    // get nearest 2 locations to child
     public GeoData saveLocation(GeoData geoData) {
         AppUser child = appUserRepository.findById(geoData.getUserId()).orElseThrow();
         if (child.getRole() == UserType.CHILD) {
@@ -51,24 +49,24 @@ public class ChildLocationService {
         }
         return geoData;
     }
-        public List<SavedLocationDTO> getNearestSavedLocation(Long childId){
+        public List<SavedLocationDTO> getNearestSavedLocation(Long childId, Integer amount){
             List<SavedLocationDTO> savedLocationDTOS = new ArrayList<>();
-            // list of parentd
+            // list of parents
             List<AppUser> parents = appUserRepository.getParentsByChildId(childId);
-            //last child location
-            ChildLocation lastChildLocation = childLocationRepository.findByTimeDesc(childId);
             //get all lists of saved locs from all parents
             for (AppUser parent : parents) {
                 savedLocationRepository.findByParentId(parent.getId())
                         .forEach(item->savedLocationDTOS.add(new SavedLocationDTO(item)));
             }
+            //last child location
+            ChildLocation lastChildLocation = childLocationRepository.findByTimeDesc(childId);
             //no duplicates
             List<SavedLocationDTO> savedLocationDTOList = new ArrayList<>(new HashSet<>(savedLocationDTOS));
             //compare and sort
             savedLocationDTOList.sort(Comparator.comparingDouble(savedLocation ->
                     calculateDistance(lastChildLocation.getLatitude(), lastChildLocation.getLongitude(),
                             savedLocation.getLatitude(), savedLocation.getLongitude())));
-            return savedLocationDTOList.subList(0, Math.min(2, savedLocationDTOList.size()));
+            return savedLocationDTOList.subList(0, Math.min(amount, savedLocationDTOList.size()));
 
         }
 

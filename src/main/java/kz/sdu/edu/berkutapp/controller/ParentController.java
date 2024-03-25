@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-//@PreAuthorize("hasRole(T(kz.sdu.edu.berkutapp.model.dto.UserType).PARENT.name())")
+@PreAuthorize("hasRole(T(kz.sdu.edu.berkutapp.model.dto.UserType).PARENT.name())")
 @RequestMapping("/parents")
 public class ParentController {
 
@@ -21,6 +21,7 @@ public class ParentController {
         parentService.addChild(parentId, childId);
     }
 
+
     @PostMapping("/task/{child-id}")
     @PreAuthorize("hasRole(T(kz.sdu.edu.berkutapp.model.dto.UserType).PARENT.name())")
     public void addTask(@RequestBody @Valid TaskDTO taskDTO, @PathVariable("child-id") Long childId){
@@ -30,5 +31,10 @@ public class ParentController {
     @PreAuthorize("hasRole(T(kz.sdu.edu.berkutapp.model.dto.UserType).PARENT.name())")
     public void deleteTask(@RequestBody @Valid TaskDTO taskDTO, @PathVariable("child-id") Long childId){
         parentService.deleteChildTask(taskDTO,childId);
+
+    @PostMapping("/saved-locations/{parent_id}")
+    public void addLocation(@PathVariable("parent_id") Long parentId, @RequestBody SavedLocationDTO savedLocationDTO) {
+        parentService.addSavedLocation(savedLocationDTO, parentId);
+
     }
 }
