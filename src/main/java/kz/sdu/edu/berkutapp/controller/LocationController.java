@@ -23,9 +23,9 @@ public class LocationController {
     public void processGeolocation(@RequestBody GeoData geoData) {
         childLocationService.sendLocation(geoData);
     }
-    @GetMapping("/SavedLocation/{child-id}")
-    public ResponseEntity<List<SavedLocationDTO>> getListOfSavedLocations(@PathVariable("child-id") Long childId) {
-        return ResponseEntity.ok(childLocationService.getNearestSavedLocation(childId));
+    @GetMapping("/saved-locations/{child-id}")
+    public ResponseEntity<List<SavedLocationDTO>> getListOfSavedLocations(@PathVariable("child-id") Long childId, @RequestParam(required = false, name = "amount") Integer amount) {
+        return ResponseEntity.ok(childLocationService.getNearestSavedLocation(childId, amount));
     }
 }
 

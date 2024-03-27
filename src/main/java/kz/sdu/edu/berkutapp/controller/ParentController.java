@@ -31,4 +31,9 @@ public class ParentController {
     public void deleteTask(@RequestBody @Valid TaskDTO taskDTO, @PathVariable("child-id") Long childId){
         parentService.deleteChildTask(taskDTO,childId);
     }
+    @PostMapping("/saved-locations/{parent_id}")
+    public void addLocation(@PathVariable("parent_id") Long parentId, @RequestBody SavedLocationDTO savedLocationDTO) {
+        parentService.addSavedLocation(savedLocationDTO, parentId);
+
+    }
 }

@@ -51,7 +51,7 @@ public class ChildLocationService {
         }
         return geoData;
     }
-        public List<SavedLocationDTO> getNearestSavedLocation(Long childId){
+        public List<SavedLocationDTO> getNearestSavedLocation(Long childId,Integer amount){
             List<SavedLocationDTO> savedLocationDTOS = new ArrayList<>();
             // list of parentd
             List<AppUser> parents = appUserRepository.getParentsByChildId(childId);
@@ -68,7 +68,7 @@ public class ChildLocationService {
             savedLocationDTOList.sort(Comparator.comparingDouble(savedLocation ->
                     calculateDistance(lastChildLocation.getLatitude(), lastChildLocation.getLongitude(),
                             savedLocation.getLatitude(), savedLocation.getLongitude())));
-            return savedLocationDTOList.subList(0, Math.min(2, savedLocationDTOList.size()));
+            return savedLocationDTOList.subList(0, Math.min(amount, savedLocationDTOList.size()));
 
         }
 
