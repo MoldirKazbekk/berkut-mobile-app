@@ -43,3 +43,10 @@ databaseChangeLog:
         - sqlFile:
             path: changes/V8_alter_saved_locations.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 5
+      author: Dayana
+      changes:
+        - sqlFile:
+            path: changes/V9_create_child_task.sql
+            relativeToChangelogFile: true

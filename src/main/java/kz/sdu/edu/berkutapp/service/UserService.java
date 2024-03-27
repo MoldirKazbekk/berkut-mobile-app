@@ -46,7 +46,9 @@ public class UserService {
         fileMetadata.setName(appUser.getUsername());
 
         InputStreamContent mediaContent = new InputStreamContent("image/jpeg", image.getInputStream());
-        googleDriveService.files().delete(appUser.getImageId()).execute();
+        if( appUser.getImageId() != null){
+            googleDriveService.files().delete(appUser.getImageId()).execute();
+        }
 
         File Drivefile = googleDriveService.files().create(fileMetadata, mediaContent)
                 .setFields("id")

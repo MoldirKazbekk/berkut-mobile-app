@@ -1,6 +1,7 @@
 package kz.sdu.edu.berkutapp.model;
 
 import jakarta.persistence.*;
+import kz.sdu.edu.berkutapp.model.dto.TaskDTO;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,8 @@ public class AppUser {
 
     @OneToMany(mappedBy = "parent",fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<SavedLocation> savedLocations;
+    @OneToMany(mappedBy = "child",fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ChildTask> childTasks;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
@@ -60,4 +63,11 @@ public class AppUser {
         childLocation.setChild(this);
         this.getChildLocations().add(childLocation);
     }
+    public void addChildTask(ChildTask childTask) {
+        childTask.setChild(this);
+        this.getChildTasks().add(childTask);
+    }
+
+
+
 }

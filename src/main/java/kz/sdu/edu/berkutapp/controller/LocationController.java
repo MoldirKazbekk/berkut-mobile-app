@@ -28,7 +28,6 @@ public class LocationController {
     public void processGeolocation(@RequestBody GeoData geoData) {
         childLocationService.sendLocation(geoData);
     }
-
     @GetMapping("/saved-locations/{child-id}")
     public ResponseEntity<List<SavedLocationDTO>> getListOfSavedLocations(@PathVariable("child-id") Long childId,
                                                                           @RequestParam(required = false, name = "amount") Integer amount) {

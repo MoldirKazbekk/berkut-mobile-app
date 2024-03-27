@@ -50,6 +50,7 @@ public class ChildLocationService {
         return geoData;
     }
         public List<SavedLocationDTO> getNearestSavedLocation(Long childId, Integer amount){
+
             List<SavedLocationDTO> savedLocationDTOS = new ArrayList<>();
             // list of parents
             List<AppUser> parents = appUserRepository.getParentsByChildId(childId);
