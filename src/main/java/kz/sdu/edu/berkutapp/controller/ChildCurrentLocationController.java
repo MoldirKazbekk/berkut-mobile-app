@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/child-geo")
 @PreAuthorize("hasRole(T(kz.sdu.edu.berkutapp.model.dto.UserType).CHILD.name())")
-public class LocationController {
+public class ChildCurrentLocationController {
     private final ChildLocationService childLocationService;
 
     @PostMapping

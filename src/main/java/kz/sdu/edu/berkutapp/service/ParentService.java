@@ -40,32 +40,5 @@ public class ParentService {
         AppUser parent = appUserRepository.findById(parentId).orElseThrow();
         parent.addSavedLocation(new SavedLocation(savedLocationDTO));
     }
-    @Transactional
-    public void addChildTask(TaskDTO taskDTO, Long childId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser parent = appUserRepository.findById(Long.valueOf((String) authentication.getPrincipal())).orElseThrow();
 
-        AppUser child = appUserRepository.findById(childId).orElseThrow();
-        // Check if the parent has the child
-        boolean isChildOfParent = parent.getChildren().contains(child);
-        if(isChildOfParent){
-            child.addChildTask(new ChildTask(taskDTO));
-        }
-
-    }
-
-    public void deleteChildTask(TaskDTO taskDTO, Long childId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser parent = appUserRepository.findById(Long.valueOf((String) authentication.getPrincipal())).orElseThrow();
-        AppUser child = appUserRepository.findById(childId).orElseThrow();
-        // Check if the parent has the child
-        boolean isChildOfParent = parent.getChildren().contains(child);
-        if (isChildOfParent){
-            child.getChildTasks()
-                    .removeIf(cht -> cht.getName().equals(String.valueOf(taskDTO.getName())) &&
-                            cht.getDescription().equals(String.valueOf(taskDTO.getDescription())));
-            appUserRepository.save(child);
-        }
-
-    }
 }

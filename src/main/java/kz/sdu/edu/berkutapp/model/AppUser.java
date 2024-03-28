@@ -1,7 +1,19 @@
 package kz.sdu.edu.berkutapp.model;
 
-import jakarta.persistence.*;
-import kz.sdu.edu.berkutapp.model.dto.TaskDTO;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import kz.sdu.edu.berkutapp.model.dto.UserType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,9 +50,10 @@ public class AppUser {
     @OneToMany(mappedBy = "child", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<HotlineNumber> hotlineNumbers;
 
-    @OneToMany(mappedBy = "parent",fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<SavedLocation> savedLocations;
-    @OneToMany(mappedBy = "child",fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "child", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ChildTask> childTasks;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -59,15 +72,14 @@ public class AppUser {
         hotlineNumber.setChild(this);
         this.getHotlineNumbers().add(hotlineNumber);
     }
+
     public void addChildLocation(ChildLocation childLocation) {
         childLocation.setChild(this);
         this.getChildLocations().add(childLocation);
     }
+
     public void addChildTask(ChildTask childTask) {
         childTask.setChild(this);
         this.getChildTasks().add(childTask);
     }
-
-
-
 }
